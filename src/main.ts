@@ -29,7 +29,7 @@ async function main() {
     };
 
 
-    const response = await agent.inference(input)
+    const response = await agent.callModel(input)
 
     console.log(response);
 
