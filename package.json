@@ -15,5 +15,9 @@
   "devDependencies": {
     "@types/node": "^26.4.1",
     "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.124.0",
+    "openai": "^7.10.0"
   }
 }
