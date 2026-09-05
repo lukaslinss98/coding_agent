@@ -16,7 +16,7 @@ export class Agent {
     this.messages = []
   }
 
-  async inference(input: string): Promise<string> {
+  async callModel(input: string): Promise<string> {
 
     this.messages.push({
       role: 'user',
