@@ -12,7 +12,7 @@ async function main() {
     baseURL: "https://openrouter.ai/api/v1"
   })
 
-  const agent = new Agent(client, 'nvidia/nemotron-3.5-lightning:free')
+  const agent = new Agent(client, 'openrouter/free')
 
   const rl = readline.createInterface({
     input: stdin,
@@ -31,7 +31,7 @@ async function main() {
 
     const response = await agent.callModel(input)
 
-    console.log(response);
+    console.log(response.content);
 
   }
 

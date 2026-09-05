@@ -16,7 +16,7 @@ export class Agent {
     this.messages = []
   }
 
-  async callModel(input: string): Promise<string> {
+  async callModel(input: string): Promise<ModelResponse> {
 
     this.messages.push({
       role: 'user',
@@ -36,8 +36,14 @@ export class Agent {
     if (message.content == null) {
       throw new Error('model did not return response')
     }
-    return message.content;
+    return {
+      content: message.content
+    }
   }
 
 
+}
+
+type ModelResponse = {
+  content: string
 }
