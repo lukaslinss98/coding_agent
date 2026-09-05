@@ -11,6 +11,9 @@
     "skipLibCheck": true,
     "lib": [
       "ES2023"
+    ],
+    "types": [
+      "node"
     ]
   },
   "include": [
