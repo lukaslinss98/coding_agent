@@ -1,5 +1,6 @@
 import { listFiles } from "./listFiles.ts";
 import { readFileTool } from "./readFile.ts";
+import { writeToFile } from "./writeFile.ts";
 
 type Tool = {
   description: string,
@@ -16,6 +17,11 @@ export const tools: Record<string, Tool> = {
     description:
       `List the names in one directory. Not recursive - call it again to go deeper. Args: {"path": string} - the directory, relative to the project root. Use "." for the root. Returns one name per line. Directories end with a slash.`,
     function: listFiles
+  },
+  write_file: {
+    description:
+      `Write text to a file, creating it if needed. Overwrites the whole file without warning - read it first if you only mean to change part of it. Args: {"path": string, "content": string} - the path relative to the project root, and the complete new contents. Returns a short confirmation.`,
+    function: writeToFile
   }
 }
 
