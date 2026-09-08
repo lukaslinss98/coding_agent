@@ -12,7 +12,7 @@ async function main() {
     baseURL: "https://openrouter.ai/api/v1"
   })
 
-  const agent = new Agent(client, 'openrouter/free')
+  const agent = new Agent(client, 'z-ai/glm-5.3-flash')
 
   const rl = readline.createInterface({
     input: stdin,

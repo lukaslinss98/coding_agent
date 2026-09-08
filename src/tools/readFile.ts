@@ -10,7 +10,7 @@ export async function readFileTool(args: unknown): Promise<string> {
   const parsed = readFileScheme.safeParse(args)
 
   if (!parsed.success) {
-    return Promise.resolve(z.prettifyError(parsed.error))
+    return z.prettifyError(parsed.error)
   }
 
   const filePath = parsed.data.path

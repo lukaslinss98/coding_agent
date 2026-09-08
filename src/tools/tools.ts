@@ -1,0 +1,26 @@
+import { listFiles } from "./listFiles.ts";
+import { readFileTool } from "./readFile.ts";
+
+type Tool = {
+  description: string,
+  function: (arg: unknown) => Promise<string>
+}
+
+export const tools: Record<string, Tool> = {
+  read_file: {
+    description:
+      `Read the contents of a single text file. Args: {"path": string} - the path to the file, relative to the project root. Returns the file contents as text.`,
+    function: readFileTool
+  },
+  list_files: {
+    description:
+      `List the names in one directory. Not recursive - call it again to go deeper. Args: {"path": string} - the directory, relative to the project root. Use "." for the root. Returns one name per line. Directories end with a slash.`,
+    function: listFiles
+  }
+}
+
+export function toolsDescription(): string {
+  return Object.entries(tools)
+    .map(([name, tool]) => `${name} - ${tool.description}`)
+    .join('\n\n')
+}
