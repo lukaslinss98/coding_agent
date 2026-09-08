@@ -20,23 +20,26 @@ async function main() {
   })
 
 
-  while (true) {
-    const input = await rl.question('> ')
+  rl.setPrompt('> ')
+  rl.prompt()
 
+  for await (const input of rl) {
     if (input === 'exit') {
       console.log('Agent exiting');
       break;
     };
 
+    try {
+      const response = await agent.callModel(input)
+      console.log(response.content)
+    } catch (err) {
+      console.error("Error:", err instanceof Error ? err.message : String(err))
+    }
 
-    const response = await agent.callModel(input)
-
-    console.log(response.content);
-
+    rl.prompt()
   }
 
   rl.close()
-
 }
 
 main().catch((err: unknown) => {
