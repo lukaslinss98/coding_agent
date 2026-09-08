@@ -34,13 +34,17 @@ export class Agent {
   private client: OpenAI;
   private model: string;
   private messages: ChatCompletionMessageParam[]
+  private onStep: (s: string) => void
+
 
   constructor(
     client: OpenAI,
-    model: string
+    model: string,
+    onStep: (s: string) => void
   ) {
     this.client = client;
     this.model = model;
+    this.onStep = onStep
     this.messages = [{
       role: 'system',
       content: SYSTEM_PROMPT
@@ -61,19 +65,24 @@ export class Agent {
         model: this.model,
         stop: ['Observation:']
       })
-      const message = response.choices[0].message;
 
-      if (message.content == null) {
+      const choice = response.choices[0]
+      if (
+        choice === undefined ||
+        choice.message.content === null
+      ) {
         throw new Error('model did not return response')
       }
 
-      this.messages.push({ role: 'assistant', content: message.content })
 
-      const reply = parseReActReply(message.content)
+      this.messages.push({ role: 'assistant', content: choice.message.content })
+
+      const reply = parseReActReply(choice.message.content)
 
       switch (reply.kind) {
         case "final": return { content: reply.answer }
         case "action": {
+          this.onStep(`Calling tool ${reply.tool}`)
           const result = await this.executeTool(reply.tool, reply.input)
           this.messages.push({ role: "user", content: `Observation: ${result}` })
           break
@@ -91,20 +100,21 @@ export class Agent {
 
 
   async executeTool(toolName: string, input: string): Promise<string> {
+    let args: unknown
+
     try {
-      const args = JSON.parse(input)
-
-      const tool = tools[toolName]
-
-      if (tool === undefined) {
-        return `Unknown tool ${toolName}. Available tools ${toolsDescription()}`
-      }
-
-      return tool.function(args)
-
+      args = JSON.parse(input)
     } catch (err) {
       return `Could not parse input args for tool. Threw error ${err}`
     }
+
+    const tool = tools[toolName]
+
+    if (tool === undefined) {
+      return `Unknown tool ${toolName}. Available tools ${toolsDescription()}`
+    }
+
+    return tool.function(args)
   }
 
 
