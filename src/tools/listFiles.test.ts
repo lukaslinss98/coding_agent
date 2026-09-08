@@ -1,7 +1,6 @@
 import { after, before, test } from "node:test"
 import assert from "node:assert/strict"
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises"
-import { tmpdir } from "node:os"
 import { join } from "node:path"
 
 import { listFiles } from "./listFiles.ts"
@@ -9,7 +8,8 @@ import { listFiles } from "./listFiles.ts"
 let dir: string
 
 before(async () => {
-  dir = await mkdtemp(join(tmpdir(), "listfiles-test-"))
+  // inside the project root, because the tool refuses paths outside it
+  dir = await mkdtemp(join(process.cwd(), "tmp-listfiles-test-"))
   await writeFile(join(dir, "main.ts"), "", "utf-8")
   await mkdir(join(dir, "tools"))
   await mkdir(join(dir, "node_modules"))
@@ -36,4 +36,10 @@ test("returns an error message when the directory does not exist", async () => {
   const result = await listFiles({ path: join(dir, "missing") })
 
   assert.match(result, /list_files/)
+})
+
+test("refuses a path outside the project directory", async () => {
+  const result = await listFiles({ path: "../.." })
+
+  assert.match(result, /outside the project directory/)
 })

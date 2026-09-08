@@ -1,6 +1,7 @@
 import type { Dirent } from "node:fs";
 import { readdir } from "node:fs/promises";
 import z from "zod";
+import { safePath } from "./safePath.ts";
 
 const IGNORED_FILES = new Set(['node_modules', '.git'])
 const listFilesScheme = z.object({
@@ -14,7 +15,11 @@ export async function listFiles(args: unknown) {
     return z.prettifyError(parsed.error)
   }
 
-  const directoryPath = parsed.data.path
+  const directoryPath = safePath(parsed.data.path)
+
+  if (directoryPath === null) {
+    return `Refused: ${parsed.data.path} is outside the project directory.`
+  }
 
   try {
     const contents = await readdir(directoryPath, { withFileTypes: true })

@@ -1,7 +1,6 @@
 import { after, before, test } from "node:test"
 import assert from "node:assert/strict"
 import { mkdtemp, rm, writeFile } from "node:fs/promises"
-import { tmpdir } from "node:os"
 import { join } from "node:path"
 
 import { readFileTool } from "./readFile.ts"
@@ -9,7 +8,8 @@ import { readFileTool } from "./readFile.ts"
 let dir: string
 
 before(async () => {
-  dir = await mkdtemp(join(tmpdir(), "readfile-test-"))
+  // inside the project root, because the tool refuses paths outside it
+  dir = await mkdtemp(join(process.cwd(), "tmp-readfile-test-"))
   await writeFile(join(dir, "hello.txt"), "hello world", "utf-8")
 })
 
@@ -33,4 +33,10 @@ test("returns an error message when the file does not exist", async () => {
   const result = await readFileTool({ path: join(dir, "missing.txt") })
 
   assert.match(result, /Could not read/)
+})
+
+test("refuses a path outside the project directory", async () => {
+  const result = await readFileTool({ path: "../../../../etc/hosts" })
+
+  assert.match(result, /outside the project directory/)
 })
