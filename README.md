@@ -4,7 +4,7 @@ A simple AI coding agent, built from scratch to learn more about agentic coding
 
 ## Requirements
 
-- Node 22+ (runs TypeScript directly, no build step)
+- Node 26+ (runs TypeScript directly, no build step)
 - An OpenRouter API key exported as `OPENROUTER_API_KEY`
 
 ## Setup
@@ -23,6 +23,20 @@ npm test           # run tests
 ```
 
 Type a message at the `>` prompt. Type `exit` to quit.
+
+### Run as a CLI command
+
+The project also installs as an `agent` command, so you can run it from any
+directory without `npm start`:
+
+```bash
+npm link   # once, or again after changing the "bin" field in package.json
+agent
+```
+
+`npm link` symlinks the `agent` command to `src/main.ts`, so code changes take
+effect immediately — no relinking needed unless you edit `package.json`'s
+`name` or `bin` fields.
 
 ## Tools
 

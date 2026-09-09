@@ -9,7 +9,10 @@
     "typecheck": "tsc --noEmit",
     "test": "node --test"
   },
-  "author": "",
+  "bin": {
+    "agent": "./src/main.ts"
+  },
+  "author": "lukaslinss",
   "license": "ISC",
   "type": "module",
   "devDependencies": {

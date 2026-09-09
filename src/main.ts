@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { stdin, stdout } from "node:process"
 import * as readline from "node:readline/promises"
 import OpenAi from "openai"

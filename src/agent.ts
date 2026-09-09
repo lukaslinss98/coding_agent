@@ -7,10 +7,10 @@ type ModelResponse = {
   content: string
 }
 
-const MAX_STEPS = 10
+const MAX_STEPS = 20
 
 const SYSTEM_PROMPT = `
-You have access to these tools:
+You are a helpful coding assistent. You have access to these tools:
 
 ${toolsDescription()}
 
