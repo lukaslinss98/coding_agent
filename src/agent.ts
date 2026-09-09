@@ -76,7 +76,7 @@ export class Agent {
         case "final":
           return { content: reply.answer };
         case "action": {
-          this.onStep(`Calling tool ${reply.tool}`);
+          this.onStep(`Calling tool ${reply.tool} - ${reply.input}`);
           const result = await this.executeTool(reply.tool, reply.input);
           this.messages.push({
             role: "user",
