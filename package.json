@@ -8,7 +8,9 @@
     "start": "node src/main.ts",
     "typecheck": "tsc --noEmit",
     "test": "node --test",
-    "prepare": "husky"
+    "prepare": "husky",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "bin": {
     "agent": "./src/main.ts"
@@ -19,6 +21,7 @@
   "devDependencies": {
     "@types/node": "^26.4.1",
     "husky": "^9.1.7",
+    "prettier": "^3.9.6",
     "typescript": "^7.0.2"
   },
   "dependencies": {
