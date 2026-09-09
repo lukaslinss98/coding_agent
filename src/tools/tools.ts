@@ -25,8 +25,6 @@ export const tools: Record<string, Tool> = {
   }
 }
 
-export function toolsDescription(): string {
-  return Object.entries(tools)
-    .map(([name, tool]) => `${name} - ${tool.description}`)
-    .join('\n\n')
-}
+export const toolsDescription = Object.entries(tools)
+  .map(([name, tool]) => `${name} - ${tool.description}`)
+  .join('\n\n')

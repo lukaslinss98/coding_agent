@@ -12,7 +12,7 @@ const MAX_STEPS = 20
 const SYSTEM_PROMPT = `
 You are a helpful coding assistent. You have access to these tools:
 
-${toolsDescription()}
+${toolsDescription}
 
 To use a tool, reply in exactly this format:
 
@@ -111,7 +111,7 @@ export class Agent {
     const tool = tools[toolName]
 
     if (tool === undefined) {
-      return `Unknown tool ${toolName}. Available tools ${toolsDescription()}`
+      return `Unknown tool ${toolName}. Available tools ${toolsDescription}`
     }
 
     return tool.function(args)
