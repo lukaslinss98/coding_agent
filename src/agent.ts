@@ -7,8 +7,6 @@ type ModelResponse = {
   content: string;
 };
 
-const MAX_STEPS = 20;
-
 const SYSTEM_PROMPT = `
 You are a helpful coding assistent. You have access to these tools:
 
@@ -34,11 +32,18 @@ export class Agent {
   private model: string;
   private messages: ChatCompletionMessageParam[];
   private onStep: (s: string) => void;
+  private maxSteps: number;
 
-  constructor(client: OpenAI, model: string, onStep: (s: string) => void) {
+  constructor(
+    client: OpenAI,
+    model: string,
+    maxSteps: number,
+    onStep: (s: string) => void,
+  ) {
     this.client = client;
     this.model = model;
     this.onStep = onStep;
+    this.maxSteps = maxSteps;
     this.messages = [
       {
         role: "system",
@@ -53,11 +58,10 @@ export class Agent {
       content: input,
     });
 
-    for (let i = 0; i < MAX_STEPS; i++) {
+    for (let i = 0; i < this.maxSteps; i++) {
       const response = await this.client.chat.completions.create({
         messages: this.messages,
         model: this.model,
-        stop: ["Observation:"],
       });
 
       const choice = response.choices[0];
@@ -91,7 +95,7 @@ export class Agent {
     }
 
     return {
-      content: `model did not arrive at final answer after ${MAX_STEPS} maximum steps`,
+      content: `model did not arrive at final answer after ${this.maxSteps} maximum steps`,
     };
   }
 

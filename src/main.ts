@@ -8,7 +8,7 @@ import { cliArguments, helpText } from "./cli.ts";
 import { config } from "./config.ts";
 
 async function main() {
-  const { model, help } = cliArguments();
+  const { model, help, maxSteps } = cliArguments();
 
   if (help) {
     console.log(helpText());
@@ -22,7 +22,9 @@ async function main() {
     baseURL: config.openRouterBaseUrl,
   });
 
-  const agent = new Agent(client, model, (s) => console.log(s));
+  const agent = new Agent(client, model, maxSteps, (s: string) =>
+    console.log(s),
+  );
 
   const rl = readline.createInterface({
     input: stdin,

@@ -1,10 +1,16 @@
 import { parseArgs } from "node:util";
+import { config } from "./config.ts";
 
 const options = {
   model: {
     type: "string",
     default: "openrouter/free",
     description: "Model to use",
+  },
+  "max-steps": {
+    type: "string",
+    default: String(config.maxStepsDefault),
+    description: "Maximum number of steps the agent can take",
   },
   help: {
     type: "boolean",
@@ -16,8 +22,12 @@ const options = {
 
 export function cliArguments() {
   const args = parseArgs({ options });
+  const maxSteps = Number(args.values["max-steps"]);
 
-  return args.values;
+  return {
+    ...args.values,
+    maxSteps,
+  };
 }
 
 export function helpText() {

@@ -26,10 +26,13 @@ test("parses a final answer spanning several lines", () => {
   });
 });
 
-test("prefers the final answer over an action", () => {
-  const reply = "Action: read_file\nFinal Answer: never mind";
+test("prefers whichever marker appears first, ignoring what follows", () => {
+  const actionFirst =
+    "Action: read_file\nAction Input: {}\nFinal Answer: never mind";
+  assert.equal(parseReactReply(actionFirst).kind, "action");
 
-  assert.equal(parseReactReply(reply).kind, "final");
+  const finalFirst = "Final Answer: done\nAction: read_file";
+  assert.equal(parseReactReply(finalFirst).kind, "final");
 });
 
 test("reports an error when the reply is plain chat", () => {
