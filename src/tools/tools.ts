@@ -9,15 +9,15 @@ type Tool = {
 
 export const tools: Record<string, Tool> = {
   read_file: {
-    description: `Read the contents of a single text file. Args: {"path": string} - the path to the file, relative to the project root. Returns the file contents as text.`,
+    description: `Read one text file. Args: {"path": string} - path relative to project root, must stay inside the project. Returns the file text. Fails if missing or outside the project.`,
     function: readFileTool,
   },
   list_files: {
-    description: `List the names in one directory. Not recursive - call it again to go deeper. Args: {"path": string} - the directory, relative to the project root. Use "." for the root. Returns one name per line. Directories end with a slash.`,
+    description: `List names in one directory. Not recursive - call again to go deeper. Args: {"path": string} - directory relative to project root, use "." for root. Returns one name per line, directories end with "/". Fails if outside the project.`,
     function: listFiles,
   },
   write_file: {
-    description: `Write text to a file, creating it if needed. Overwrites the whole file without warning - read it first if you only mean to change part of it. Args: {"path": string, "content": string} - the path relative to the project root, and the complete new contents. Returns a short confirmation.`,
+    description: `Write full new content to a file. Creates the file if missing. Overwrites the whole file without warning. Args: {"path": string, "content": string} - path relative to project root, must stay inside the project. Returns a short confirmation.`,
     function: writeToFile,
   },
 };

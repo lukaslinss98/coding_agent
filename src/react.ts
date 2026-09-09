@@ -1,9 +1,11 @@
-export type ParseResult =
-  | { kind: "final"; answer: string }
-  | { kind: "action"; tool: string; input: string }
-  | { kind: "error"; message: string };
+export type FinalResult = { kind: "final"; answer: string }
+export type ActionResult = { kind: "action"; tool: string; input: string; thought: string }
+export type ErrorResult = { kind: "error"; message: string };
+
+export type ParseResult = FinalResult | ActionResult | ErrorResult
 
 const FINAL_ANSWER = "Final Answer:";
+const THOUGHT = "Thought:";
 const ACTION = "Action:";
 const ACTION_INPUT = "Action Input:";
 
@@ -29,7 +31,7 @@ export function parseReactReply(text: string): ParseResult {
         };
       }
 
-      return { kind: "action", tool, input };
+      return { kind: "action", tool, input, thought: findLineValue(lines, THOUGHT) ?? "" };
     }
   }
 

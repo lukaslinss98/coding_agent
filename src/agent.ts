@@ -1,6 +1,6 @@
 import type OpenAI from "openai";
 import type { ChatCompletionMessageParam } from "openai/resources.js";
-import { parseReactReply as parseReActReply } from "./react.ts";
+import { parseReactReply as parseReActReply, type ActionResult, type ParseResult } from "./react.ts";
 import { tools, toolsDescription } from "./tools/tools.ts";
 
 type ModelResponse = {
@@ -8,15 +8,31 @@ type ModelResponse = {
 };
 
 const SYSTEM_PROMPT = `
-You are a helpful coding assistent. You have access to these tools:
+You are a coding assistant working in a project. Project root is ".".
+You have access to these tools:
 
 ${toolsDescription}
 
+General tool rules:
+- Explore with list_files and read_file before you change anything.
+- Read a file before you overwrite it with write_file.
+- One tool call per reply. Never write "Observation:" yourself.
+
 To use a tool, reply in exactly this format:
 
-Thought: <why>
+Thought: <why you need this step>
 Action: <tool name>
-Action Input: {<args object>}
+Action Input: <single-line JSON>
+
+Rules for Action Input:
+- Valid JSON only.
+- No markdown fence. No extra text after it.
+
+Example:
+
+Thought: I need to see the project layout first.
+Action: list_files
+Action Input: {"path": "."}
 
 Stop after Action Input. I will reply with the result:
 
@@ -80,7 +96,7 @@ export class Agent {
         case "final":
           return { content: reply.answer };
         case "action": {
-          this.onStep(`Calling tool ${reply.tool} - ${reply.input}`);
+          this.onStep(`Thought: ${reply.thought}\nCalling tool ${reply.tool} - ${reply.input}`);
           const result = await this.executeTool(reply.tool, reply.input);
           this.messages.push({
             role: "user",
