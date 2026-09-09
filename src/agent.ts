@@ -1,6 +1,10 @@
 import type OpenAI from "openai";
 import type { ChatCompletionMessageParam } from "openai/resources.js";
-import { parseReactReply as parseReActReply, type ActionResult, type ParseResult } from "./react.ts";
+import {
+  parseReactReply as parseReActReply,
+  type ActionResult,
+  type ParseResult,
+} from "./react.ts";
 import { tools, toolsDescription } from "./tools/tools.ts";
 
 type ModelResponse = {
@@ -96,7 +100,9 @@ export class Agent {
         case "final":
           return { content: reply.answer };
         case "action": {
-          this.onStep(`Thought: ${reply.thought}\nCalling tool ${reply.tool} - ${reply.input}`);
+          this.onStep(
+            `Thought: ${reply.thought}\nCalling tool ${reply.tool} - ${reply.input}`,
+          );
           const result = await this.executeTool(reply.tool, reply.input);
           this.messages.push({
             role: "user",

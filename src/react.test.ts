@@ -19,7 +19,10 @@ test("parses an action and its input", () => {
 });
 
 test("uses empty thought when Thought is missing", () => {
-  const reply = ['Action: read_file', 'Action Input: {"path": "src/agent.ts"}'].join("\n");
+  const reply = [
+    "Action: read_file",
+    'Action Input: {"path": "src/agent.ts"}',
+  ].join("\n");
 
   assert.deepEqual(parseReactReply(reply), {
     kind: "action",

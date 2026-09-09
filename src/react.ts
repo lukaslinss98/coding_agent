@@ -1,8 +1,13 @@
-export type FinalResult = { kind: "final"; answer: string }
-export type ActionResult = { kind: "action"; tool: string; input: string; thought: string }
+export type FinalResult = { kind: "final"; answer: string };
+export type ActionResult = {
+  kind: "action";
+  tool: string;
+  input: string;
+  thought: string;
+};
 export type ErrorResult = { kind: "error"; message: string };
 
-export type ParseResult = FinalResult | ActionResult | ErrorResult
+export type ParseResult = FinalResult | ActionResult | ErrorResult;
 
 const FINAL_ANSWER = "Final Answer:";
 const THOUGHT = "Thought:";
@@ -31,7 +36,12 @@ export function parseReactReply(text: string): ParseResult {
         };
       }
 
-      return { kind: "action", tool, input, thought: findLineValue(lines, THOUGHT) ?? "" };
+      return {
+        kind: "action",
+        tool,
+        input,
+        thought: findLineValue(lines, THOUGHT) ?? "",
+      };
     }
   }
 
