@@ -29,13 +29,18 @@ npm run dev        # run with --watch
 npm start          # run once
 npm run typecheck  # tsc --noEmit
 npm test           # node --test
+agent              # run via the linked CLI command (npm link first); supports --model and --help
 ```
 
 ## Layout
 
 ```
 src/
-  main.ts   entry point: wiring and startup
+  main.ts     entry point: wiring and startup
+  cli.ts      CLI flag parsing (--model, --help)
+  agent.ts    the ReAct loop: prompts the model, dispatches tool calls
+  react.ts    parses a model reply into an action or final answer
+  tools/      one file per tool, plus tools.ts wiring them together
 ```
 
 Rules:
