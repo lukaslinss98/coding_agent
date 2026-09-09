@@ -4,8 +4,18 @@ import { stdin, stdout } from "node:process"
 import * as readline from "node:readline/promises"
 import OpenAi from "openai"
 import { Agent } from "./agent.ts"
+import { cliArguments, helpText } from "./cli.ts"
 
 async function main() {
+
+  const { model, help } = cliArguments()
+
+  if (help) {
+    console.log(helpText());
+    return
+  }
+
+  console.log(`harness started with model: ${model}`)
 
   const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY
 
@@ -14,7 +24,7 @@ async function main() {
     baseURL: "https://openrouter.ai/api/v1"
   })
 
-  const agent = new Agent(client, 'z-ai/glm-5.3-flash', (s) => console.log(s))
+  const agent = new Agent(client, model, (s) => console.log(s))
 
   const rl = readline.createInterface({
     input: stdin,
