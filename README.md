@@ -38,6 +38,13 @@ agent
 effect immediately — no relinking needed unless you edit `package.json`'s
 `name` or `bin` fields.
 
+Flags:
+
+| Flag | Default | What it does |
+| --- | --- | --- |
+| `--model <name>` | `openrouter/free` | Sets the model the agent calls. |
+| `-h`, `--help` | | Prints usage and exits. |
+
 ## Tools
 
 The agent works in a ReAct loop: it reasons, calls one tool, reads the result,
