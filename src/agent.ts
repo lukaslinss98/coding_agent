@@ -2,8 +2,6 @@ import type OpenAI from "openai";
 import type { ChatCompletionMessageParam } from "openai/resources.js";
 import {
   parseReactReply as parseReActReply,
-  type ActionResult,
-  type ParseResult,
 } from "./react.ts";
 import { tools, toolsDescription } from "./tools/tools.ts";
 
