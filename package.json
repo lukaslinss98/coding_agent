@@ -10,7 +10,8 @@
     "test": "node --test",
     "prepare": "husky",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "code_quality": "habit-hooks"
   },
   "bin": {
     "agent": "./src/main.ts"
@@ -21,7 +22,9 @@
   "devDependencies": {
     "@types/node": "^26.4.1",
     "husky": "^9.1.7",
+    "jscpd": "^5.2.0",
     "prettier": "^3.9.6",
+    "ts-morph": "^28.0.0",
     "typescript": "^7.0.2"
   },
   "dependencies": {

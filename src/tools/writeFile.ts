@@ -1,6 +1,6 @@
 import z from "zod";
-import { safePath } from "./safePath.ts";
 import { writeFile } from "node:fs/promises";
+import { resolvePathArgs } from "./toolArgs.ts";
 
 const writeToFileSchema = z.object({
   path: z.string(),
@@ -8,27 +8,21 @@ const writeToFileSchema = z.object({
 });
 
 export async function writeToFile(args: unknown): Promise<string> {
-  const parsed = writeToFileSchema.safeParse(args);
+  const resolved = resolvePathArgs(writeToFileSchema, args);
 
-  if (!parsed.success) {
-    return z.prettifyError(parsed.error);
+  if (!resolved.ok) {
+    return resolved.error;
   }
 
-  const filePath = safePath(parsed.data.path);
-
-  if (filePath === null) {
-    return `Refused: ${parsed.data.path} is outside the project directory.`;
-  }
-
-  const content = parsed.data.content;
+  const content = resolved.data.content;
 
   try {
-    await writeFile(filePath, content, "utf-8");
+    await writeFile(resolved.filePath, content, "utf-8");
   } catch (err) {
     return `Error while invoking tool, write_file: ${err}`;
   }
 
   const bytes = Buffer.byteLength(content, "utf-8");
 
-  return `Wrote ${bytes} to ${parsed.data.path}`;
+  return `Wrote ${bytes} to ${resolved.data.path}`;
 }

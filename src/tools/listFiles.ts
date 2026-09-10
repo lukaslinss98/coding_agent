@@ -1,7 +1,7 @@
 import type { Dirent } from "node:fs";
 import { readdir } from "node:fs/promises";
 import z from "zod";
-import { safePath } from "./safePath.ts";
+import { resolvePathArgs } from "./toolArgs.ts";
 
 const IGNORED_FILES = new Set(["node_modules", ".git"]);
 const listFilesScheme = z.object({
@@ -9,20 +9,14 @@ const listFilesScheme = z.object({
 });
 
 export async function listFiles(args: unknown) {
-  const parsed = listFilesScheme.safeParse(args);
+  const resolved = resolvePathArgs(listFilesScheme, args);
 
-  if (!parsed.success) {
-    return z.prettifyError(parsed.error);
-  }
-
-  const directoryPath = safePath(parsed.data.path);
-
-  if (directoryPath === null) {
-    return `Refused: ${parsed.data.path} is outside the project directory.`;
+  if (!resolved.ok) {
+    return resolved.error;
   }
 
   try {
-    const contents = await readdir(directoryPath, { withFileTypes: true });
+    const contents = await readdir(resolved.filePath, { withFileTypes: true });
 
     return contents.filter(useEntry).map(mapEntry).join("\n");
   } catch (err) {

@@ -1,14 +1,15 @@
 import { after, before, test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { readFile, rm, writeFile } from "node:fs/promises";
 import { join, relative } from "node:path";
 
 import { writeToFile } from "./writeFile.ts";
+import { makeTempDirInsideProject } from "./testTempDir.ts";
 
 let dir: string;
 
 before(async () => {
-  dir = await mkdtemp(join(process.cwd(), "tmp-writefile-test-"));
+  dir = await makeTempDirInsideProject("tmp-writefile-test-");
 });
 
 after(async () => {

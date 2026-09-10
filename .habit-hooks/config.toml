@@ -1,0 +1,9 @@
+plugins = ["typescript", "generic"]
+
+[sensors.knip]
+disabled = true
+
+# typescript-eslint has no TypeScript 7 support yet, so ESLint cannot parse
+# our .ts files. Re-enable once @typescript-eslint/parser accepts typescript@7.
+[sensors.eslint]
+disabled = true

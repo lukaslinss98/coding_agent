@@ -1,15 +1,15 @@
 import { after, before, test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
 import { listFiles } from "./listFiles.ts";
+import { makeTempDirInsideProject } from "./testTempDir.ts";
 
 let dir: string;
 
 before(async () => {
-  // inside the project root, because the tool refuses paths outside it
-  dir = await mkdtemp(join(process.cwd(), "tmp-listfiles-test-"));
+  dir = await makeTempDirInsideProject("tmp-listfiles-test-");
   await writeFile(join(dir, "main.ts"), "", "utf-8");
   await mkdir(join(dir, "tools"));
   await mkdir(join(dir, "node_modules"));

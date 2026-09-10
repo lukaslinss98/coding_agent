@@ -60,6 +60,8 @@ Rules:
 - Async I/O only. Never block the event loop with sync calls in the agent loop.
 - Set `process.exitCode` instead of calling `process.exit()`, so pending output flushes.
 - Prefer the Node standard library over a dependency. Add a package only when it earns its place.
+- Comments explain _why_, never _what_. If a comment describes what the code does,
+  put that in the name instead: `makeTempDirInsideProject` beats a comment above `mkdtemp`.
 
 ## Before finishing a change
 
